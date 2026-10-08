@@ -1,13 +1,19 @@
 import Link from 'next/link'
+import { HealthTimeline } from '@/components/pets/HealthTimeline'
 import { UpcomingList } from '@/components/pets/UpcomingList'
 import { formatDate } from '@/lib/dates'
 import { loadPet } from '@/lib/pet-loader'
+import { listRecords } from '@/lib/records'
 import { listUpcoming } from '@/lib/reminders'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function PetOverviewPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
-  const [pet, upcoming] = await Promise.all([loadPet(params.id), listUpcoming(supabase, { petId: params.id, limit: 6 })])
+  const [pet, upcoming, recent] = await Promise.all([
+    loadPet(params.id),
+    listUpcoming(supabase, { petId: params.id, limit: 6 }),
+    listRecords(supabase, params.id, 4),
+  ])
   if (!pet) return null
 
   const facts = [
@@ -34,6 +40,20 @@ export default async function PetOverviewPage({ params }: { params: { id: string
             showPet={false}
             emptyText={`Nothing scheduled for ${pet.name}. Log a vaccination or deworming with a next due date and it will appear here.`}
           />
+        </section>
+
+        <section aria-labelledby="pet-recent">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 id="pet-recent" className="font-display text-lg font-bold tracking-tight">
+              Recent
+            </h2>
+            {recent.length > 0 && (
+              <Link href={`/pets/${pet.id}/health`} className="text-[13px] font-semibold text-primary hover:text-primary-ink">
+                Full history
+              </Link>
+            )}
+          </div>
+          <HealthTimeline records={recent} compact />
         </section>
       </div>
 
