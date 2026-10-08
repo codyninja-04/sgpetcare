@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Disclaimer } from '@/components/health/Disclaimer'
 import { HealthWorkspace } from '@/components/health/HealthWorkspace'
 import { VaccinationTracker } from '@/components/pets/VaccinationTracker'
 import { BugIcon } from '@/components/ui/Icons'
@@ -35,6 +36,7 @@ export default async function PetHealthPage({ params }: { params: { id: string }
           species={pet.species}
           records={records}
           canUploadDocuments={usage.canUploadDocuments}
+          canInterpret={usage.canInterpret}
         />
       </div>
 
@@ -78,6 +80,8 @@ export default async function PetHealthPage({ params }: { params: { id: string }
             </div>
           </div>
         )}
+
+        <Disclaimer className="px-1" />
       </aside>
     </div>
   )
