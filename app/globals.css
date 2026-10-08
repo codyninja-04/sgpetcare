@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Warm and calm. Owners usually open this app when something is due or a pet
+ * is unwell, so the page stays quiet and the only strong colours are the
+ * orange accent and the three licence states. Values come from the design
+ * spec, stored as RGB channels so Tailwind opacity modifiers work.
+ */
+:root {
+  --background: 255 247 237;
+  --surface: 255 255 255;
+  --subtle: 254 240 224;
+  --border: 240 225 208;
+  --primary: 234 88 12;
+  --primary-soft: 255 237 213;
+  --primary-ink: 194 65 12;
+  --license-valid: 22 163 74;
+  --license-expiring: 217 119 6;
+  --license-expired: 220 38 38;
+  --text: 41 28 20;
+  --muted: 125 106 94;
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-text;
+  }
+  ::selection {
+    @apply bg-primary/15;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-border bg-surface shadow-card;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition
+      focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white shadow-sm hover:bg-primary-ink active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply btn border border-border bg-surface text-text shadow-sm hover:border-primary/30 hover:bg-primary-soft/40 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn text-muted hover:bg-subtle hover:text-text;
+  }
+  .btn-danger {
+    @apply btn border border-expired/30 bg-surface text-expired hover:bg-expired/5;
+  }
+  .input {
+    @apply w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-[15px] text-text placeholder:text-muted/60
+      transition focus:border-primary/60 focus:shadow-focus focus:outline-none;
+  }
+  .textarea {
+    @apply input min-h-[140px] resize-y leading-relaxed;
+  }
+  .label {
+    @apply mb-1.5 block text-[13px] font-semibold text-text;
+  }
+  .hint {
+    @apply mt-1.5 text-[12px] leading-relaxed text-muted;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[13px] font-medium text-muted
+      transition hover:border-primary/30 hover:text-text;
+  }
+  .chip-on {
+    @apply border-primary/50 bg-primary-soft text-primary-ink hover:border-primary/70 hover:text-primary-ink;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-muted;
+  }
+  .skeleton {
+    @apply rounded-lg bg-subtle;
+    background-image: linear-gradient(90deg, transparent 0, rgb(255 255 255 / 0.7) 50%, transparent 100%);
+    background-size: 400px 100%;
+    background-repeat: no-repeat;
+    animation: shimmer 1.4s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
