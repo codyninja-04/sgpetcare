@@ -121,6 +121,7 @@ alter table qa_messages enable row level security;
 alter table push_subscriptions enable row level security;
 
 create policy "own_profile_select" on profiles for select using (auth.uid() = id);
+create policy "own_profile_insert" on profiles for insert with check (auth.uid() = id and plan = 'free');
 -- Plan is not user editable. Billing updates it with the service role.
 create policy "own_profile_update" on profiles for update using (auth.uid() = id)
   with check (auth.uid() = id and plan = (select p.plan from profiles p where p.id = auth.uid()));
